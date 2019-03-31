@@ -3,3 +3,15 @@ procedure mod_add_n(int a, int b, int n)
     if a >= n then
         a -= n
     fi a < b
+    
+procedure mod_add(int a, int ka, int b, int kb, int n)
+    ka += a / n
+    kb += b / n
+    
+    a -= ka * n
+    b -= kb * n
+    
+    a += b
+    if a >= n then
+        a -= n
+    fi a < b
