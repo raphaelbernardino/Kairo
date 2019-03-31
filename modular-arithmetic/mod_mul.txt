@@ -1,0 +1,54 @@
+procedure mod_mul1(int a, int ka, int b, int kb, int n)
+    local int c = 0
+    local int kc = 0
+    local int s = 0
+    
+    if b != 0 then
+        call mul(a, b, s)
+        call mod_add(a, ka, c, kc, n)
+    fi b != 0
+    
+    delocal int s = 0
+    delocal int kc = 0
+    delocal int c = 0
+    
+procedure mod_mul2(int a, int b, int r, int n, int s)
+    call mul(a, b, s)
+    if s = 0 then
+        call div(a, n, r)
+    else
+        call div(b, n, r)
+    fi s = 0
+    
+procedure mod_mul(int a2, int b3, int n4, stack s)
+    local int ainv = 0
+    local int m = 0
+    local int g = 0
+    local int ninv = 0
+    
+    call ext_gcd(s, a, n, g, ainv, ninv)
+    m += (a * b) % n
+    b -= (ainv * m) % n
+    uncall ext_gcd(s, a, n, g, ainv, ninv)
+    b <=> m
+    
+    delocal int ninv = 0
+    delocal int g = 0
+    delocal int m = 0
+    delocal int ainv = 0
+
+procedure main()
+    int a
+    int b
+    int n
+    
+    int ka
+    int kb
+    
+    a += 527663233
+    b += 4413245678
+    n += 7
+    
+    call mod_mul(a, ka, b, kb, n)
+    show(a, ka, b, kb, n)
+    uncall mod_mul(a, ka, b, kb, n)

@@ -1,0 +1,5 @@
+procedure mod_add_n(int a, int b, int n)
+    a += b
+    if a >= n then
+        a -= n
+    fi a < b

@@ -1,0 +1,136 @@
+procedure mul(int a, int b, int swapped)
+    local int c = 0
+    
+    if b != 0 then
+        c += a * b
+        c <=> a
+        c -= a / b
+    else
+        swapped += 1
+    fi b != 0
+    
+    delocal int c = 0
+
+procedure div(int x, int y, int r)
+    local int z = 0
+    
+    if y != 0 then
+        z += x / y
+        r += x % y
+        x <=> z
+        z -= (x * y) + r
+    else
+        print ("division by zero")
+    fi y != 0
+    
+    delocal int z = 0
+    
+procedure mod_mul2(int a, int b, int r, int n, int swapped)
+    call mul(a, b, swapped)
+    if swapped = 0 then
+        call div(a, n, r)
+    else
+        call div(b, n, r)
+    fi swapped = 0
+    
+procedure mod_pow(stack s, int base, int exponent, int n, int result)
+    local int i = exponent
+    local int b = 0
+    local int r = 0
+    local int swap = 0
+    local int result_temp = 0
+    
+    if n = 0 then
+        print ("division by zero!")
+    fi n = 0
+    
+    if n > 1 && exponent >= 0 then
+        result_temp += 1
+        from i = exponent
+        do
+            // check if exponent is odd
+            if i % 2 = 1 then
+                // result = (result * base) % n
+                call mod_mul2(result_temp, base, r, n, swap)
+                push(swap, s)
+                
+                // swap result and remainder values
+                result_temp <=> r
+                
+                // stores previous result
+                push(r, s)
+            fi i % 2 = 1
+    
+            // i = i >> 1
+            call div(i, 2, r)
+            // stores remainder in the stack
+            push(r, s)
+    
+            // base = base * base
+            b += base
+            call mul(base, b, swap)
+            push(b, s)
+            push(swap, s)
+
+            // base = base % n
+            call div(base, n, r)
+    
+            // swap base and remainder values
+            base <=> r
+    
+            // stores previous base
+            push(r, s)
+        until i = 0
+    
+        // saves final result
+        result += result_temp
+        show(result)
+    
+        from i = 0
+        do
+            pop(r, s)
+            base <=> r
+            uncall div(base, n, r)
+            pop(swap, s)
+            pop(b, s)
+            uncall mul(base, b, swap)
+            b -= base
+    
+            pop(r, s)
+            uncall div(i, 2, r)
+    
+            if i % 2 = 1 then
+                pop(r, s)
+                result_temp <=> r
+                pop(swap, s)
+                uncall mod_mul2(result_temp, base, r, n, swap)
+            fi i % 2 = 1
+        until i = exponent
+        result_temp -= 1
+    else
+        print("modulus and exponent must be greater than zero.")
+    fi n > 1 && exponent >= 0
+
+    delocal int result_temp = 0
+    delocal int swap = 0
+    delocal int r = 0
+    delocal int b = 0
+    delocal int i = exponent
+
+procedure main()
+    stack s
+    int r
+    
+    int b
+    int e
+    int n
+    b += 2
+    e += 9
+    n += 7
+    
+    //b += 42
+    //e += 66
+    //n += 132
+    
+    call mod_pow(s, b, e, n, r)
+
