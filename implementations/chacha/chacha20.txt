@@ -1,0 +1,157 @@
+// https://tools.ietf.org/html/draft-strombergson-chacha-test-vectors-00#page-4
+
+procedure mod_add(int a, int b, int n)
+    a += b
+    
+    if a >= n then
+        a -= n
+    fi a < b
+
+procedure left_rotate(int d, int n, int m)
+    local int t0 = 0
+    local int t1 = 0
+    local int t2 = 0
+    local int t3 = 0
+    local int s0 = 0
+    
+    t0 += d / (1 << n)
+    s0 += t0 * (1 << n)
+    
+    t1 += (d - s0) / (1 << (n - m))
+    t2 += d - s0 - (t1 * (1 << (n - m)))
+  
+    t3 += s0 + (t2 * (1 << m)) + t1
+    
+    d -= t2
+    d -= t1 * (1 << (n - m))
+    d -= s0
+    d <=> t3
+    
+    t2 -= (d - s0 - t1) / (1 << m)
+    t1 -= d % (1 << m)
+    
+    s0 -= t0 * (1 << n)
+    t0 -= d / (1 << n)
+
+    delocal int s0 = 0
+    delocal int t3 = 0
+    delocal int t2 = 0
+    delocal int t1 = 0
+    delocal int t0 = 0
+
+procedure quarter_round(int n, int a, int b, int c, int d)
+    call mod_add(a, b, n)
+    d ^= a
+    call left_rotate(d, 32, 16)
+    
+    call mod_add(c, d, n)
+    b ^= c
+    call left_rotate(b, 32, 12)
+    
+    call mod_add(a, b, n)
+    d ^= a
+    call left_rotate(d, 32, 8)
+    
+    call mod_add(c, d, n)
+    b ^= c
+    call left_rotate(b, 32, 7)
+
+procedure chacha20_core(int state_in[], int state_out[])
+    local int i = 0
+    local int n = 1 << 32
+    
+    from i = 0
+    do
+        state_out[i] += state_in[i]
+    loop
+        i += 1
+    until i = 15
+	i -= 15
+    
+    i += 1
+    from i = 1
+    do
+        // Odd round
+    	call quarter_round(n, state_out[0], state_out[4], state_out[ 8], state_out[12])
+		call quarter_round(n, state_out[1], state_out[5], state_out[ 9], state_out[13])
+		call quarter_round(n, state_out[2], state_out[6], state_out[10], state_out[14])
+		call quarter_round(n, state_out[3], state_out[7], state_out[11], state_out[15])
+        
+        // Even round
+    	call quarter_round(n, state_out[0], state_out[5], state_out[10], state_out[15])
+		call quarter_round(n, state_out[1], state_out[6], state_out[11], state_out[12])
+		call quarter_round(n, state_out[2], state_out[7], state_out[ 8], state_out[13])
+		call quarter_round(n, state_out[3], state_out[4], state_out[ 9], state_out[14])
+    loop
+        i += 2
+    until i = 19
+    i -= 19
+    
+    from i = 0
+    do
+        call mod_add(state_out[i], state_in[i], n)
+    loop
+        i += 1
+    until i = 15
+    i -= 15
+    
+    delocal int n = 1 << 32
+    delocal int i = 0
+    
+procedure chacha_setup(int s[], int k[], int n[], int p[])
+    // sigma "expand 32-byte k" as hex
+    // nothing in the sleeve: [1634760805, 857760878, 2036477234, 1797285236] ou [0x61707865, 0x3320646e, 0x79622d32, 0x6b206574]
+    s[00] += 0x61707865 // sigma 0-3 bytes
+    s[01] += 0x3320646e // sigma 4-8 bytes
+    s[02] += 0x79622d32 //
+    s[03] += 0x6b206574 //
+    
+    s[04] += k[0] // key 0-3 bytes
+    s[05] += k[1] // key 4-8 bytes
+    s[06] += k[2] //
+    s[07] += k[3] //
+    s[08] += k[4] //
+    s[09] += k[5] //
+    s[10] += k[6] //
+    s[11] += k[7] //
+    
+    s[12] += p[0] // initial counter value
+    s[13] += p[1] // overflow counter
+    
+    s[14] += n[0] // nonce 0-3 bytes
+    s[15] += n[1] // nonce 4-8 bytes
+    
+procedure chacha20(int output[16], int k[8], int n[2], int p[2])
+    local int state[16]
+    
+    call chacha_setup(state, k, n, p)
+    call chacha20_core(state, output)
+    uncall chacha_setup(state, k, n, p)
+    
+    delocal int state[16]
+
+procedure main()
+    int k[8]
+    int n[2]
+    int p[2]
+    int sout[16]
+    
+    // key 256 bits
+    k[0] += 0067305985
+    k[1] += 0134678021
+    k[2] += 0202050057
+    k[3] += 0269422093
+    k[4] += 0072342753
+    k[5] += 0133985433
+    k[6] += 0275742354
+    k[7] += 0198982563
+    
+    // nonce 64 bits
+    n[0] += 1751606885
+    n[1] += 1818978921
+    
+    // initial counter (32 bits)
+    p[0] += 1886350957
+    p[1] += 1953722993
+    
+    call chacha20(sout, k, n, p)
