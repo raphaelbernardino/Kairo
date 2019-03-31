@@ -1,0 +1,14 @@
+procedure or(int a, int b, int c)
+    c += a | b
+
+procedure main()
+    int a
+    int b
+    int c
+    
+    a += 101
+    b += 110
+    
+    call or(a, b, c)
+    show (a, b, c)
+    uncall or(a, b, c)

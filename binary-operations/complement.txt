@@ -1,0 +1,82 @@
+procedure pow_aux(int base, int expoent, int result)
+    local int i = 0
+    local int t = 1
+    
+    from i = 0
+    do
+        call mul(t, base)
+        i += 1
+    until i = expoent
+    i -= expoent
+    
+    result <=> t
+    t += 1
+    
+    delocal int t = 1
+    delocal int i = 0
+
+procedure mul(int a, int b)
+    local int c = 0
+    c += a * b
+    c <=> a
+    delocal int c = a / b
+
+// -------------------------------------------------------
+
+procedure unsigned_not(int x, int max_int)
+    local int y = 0
+    
+    y += max_int - x
+    x <=> y
+    
+    delocal int y = max_int - x
+
+procedure signed_not(int x)
+    local int y = 0
+    
+    y += -1 -x
+    x <=> y
+    
+    delocal int y = -1 - x
+    
+procedure ones_complement(int x)
+    local int y = 0
+    y += -1 - x
+    x <=> y
+    delocal int y = -1 - x
+    
+procedure twos_complement(int x, int bits)
+    local int m = 1 << bits
+    local int y = 0
+    y += m - x
+    x <=> y
+    delocal int y = m - x
+    delocal int m = 1 << bits
+    
+procedure twos_complement_signal(int x)
+    local int y = 0
+    y -= x
+    x <=> y
+    delocal int y = 0 - x
+
+procedure main()
+    int a
+    int max
+    int bits
+    
+    a += 101
+    
+    call signed_not(a)
+    show (a)
+    call signed_not(a)
+    show (a)
+    
+    bits += 8
+    call pow_aux(2, bits, max)
+    max -= 1
+    show (max)
+    
+    call unsigned_not(a, max)
+    show (a)
+    call unsigned_not(a, max)
+    show (a)

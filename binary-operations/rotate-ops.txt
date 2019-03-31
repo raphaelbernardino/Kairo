@@ -1,0 +1,47 @@
+procedure rotl(int d, int n, int m)
+    local int t0 = 0
+    local int t1 = 0
+    local int t2 = 0
+    local int t3 = 0
+    local int s0 = 0
+    
+    t0 += d / (1 << n)
+    s0 += t0 * (1 << n)
+    
+    t1 += (d - s0) / (1 << (n - m))
+    t2 += d - s0 - (t1 * (1 << (n - m)))
+  
+    t3 += s0 + (t2 * (1 << m)) + t1
+    
+    d -= t2
+    d -= t1 * (1 << (n - m))
+    d -= s0
+    d <=> t3
+    
+    t2 -= (d - s0 - t1) / (1 << m)
+    t1 -= d % (1 << m)
+    
+    s0 -= t0 * (1 << n)
+    t0 -= d / (1 << n)
+    
+    delocal int s0 = 0
+    delocal int t3 = 0
+    delocal int t2 = 0
+    delocal int t1 = 0
+    delocal int t0 = 0
+    
+procedure rotr(int d, int n, int m)
+    uncall rotl(d, n, m)
+
+procedure main()
+    int d
+    int n
+    int m
+    
+    d += 51
+    n += 5
+    m += 2
+    
+    show(d, n, m)
+    call rotl(d, n, m)
+    show(d, n, m)
