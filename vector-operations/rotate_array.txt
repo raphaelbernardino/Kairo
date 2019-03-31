@@ -1,0 +1,39 @@
+procedure rotate_left_array(int a[])
+    local int s = size(a)
+    local int i = 0
+    
+    if s > 1 then
+        from i = 0
+        do
+            a[i] <=> a[i + 1]
+        loop
+            i += 1
+        until i = s - 2
+        
+        // reset i value
+        i -= s - 2
+    fi s > 1
+    
+    delocal int i = 0
+    delocal int s = size(a)
+
+procedure rotate_right_array(int a[])
+    uncall rotate_left_array(a)
+    
+procedure main()
+    int a[1]
+    
+    a[0] += 2
+    a[1] += 3
+    a[2] += 8
+    a[3] += 7
+    a[4] += 9
+    
+    show(a)
+    uncall rotate_left_array(a)
+    show(a)
+    uncall rotate_left_array(a)
+    show(a)
+    uncall rotate_left_array(a)
+    show(a)
+

@@ -1,0 +1,17 @@
+procedure copy_array(int in[], int out[])
+    local int in_size = size(in)
+    local int out_size = size(out)
+    local int i = 0
+    
+    if in_size < out_size then    
+        from i = 0
+        do
+            out[i] += in[i]
+        loop
+            i += 1
+        until i = in_size - 1
+    fi in_size < out_size
+    
+    delocal int i = in_size - 1
+    delocal int out_size = size(out)
+    delocal int in_size = size(in)
