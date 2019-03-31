@@ -1,0 +1,66 @@
+procedure fat(int num, int fact[])
+    local int try = 0
+    local int i = 0
+    local int z = 0
+    
+    if num = 1 then
+        i += 1
+        fact[i] += 1
+    else
+        from (try = 0) && (num > 1)
+        loop
+            call next_try(try)
+            from fact[i] != try
+            loop
+                    i += 1
+                    fact[i] += try
+                    z += num / try
+                    z <=> num
+                    z -= num * try
+            until (num % try) != 0
+        until (try * try) > num
+        
+        if num != 1 then
+            i += 1
+            fact[i] <=> num
+        else
+            num -= 1
+        fi fact[i] != fact[i - 1]
+        
+        if (fact[i - 1] * fact[i - 1]) < fact[i] then
+            from (try * try) > fact[i]
+            do skip
+            loop
+                uncall next_try(try)
+            until try = 0
+        else
+            try -= fact[i - 1]
+        fi (fact[i - 1] * fact[i - 1]) < fact[i]
+    fi num = 1
+    
+    call zeroi(i, fact)
+    
+    delocal int z = 0
+    delocal int i = 0
+    delocal int try = 0
+    
+procedure zeroi(int i, int fact[])
+    from fact[i + 1] = 0
+    do skip
+    loop
+        i -= 1
+    until i = 0
+
+procedure next_try(int try)
+    try += 2
+    if try = 4 then
+        try -= 1
+    fi try = 3
+
+procedure main()
+    int x
+    int f[20]
+    
+    x += 97
+    
+    call fat(x, f)

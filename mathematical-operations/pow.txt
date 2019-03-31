@@ -1,0 +1,27 @@
+procedure pow(int base, int exponent, int r)
+    local int i = 0
+    
+    if exponent < 0 then
+        print ("exponent must be a positive integer.")
+    else
+        r += 1
+        from i = 0
+        do skip
+        loop
+            call mul(r, base)
+            i += 1
+        until i >= exponent
+        i -= exponent
+    fi exponent < 0
+    
+    delocal int i = 0
+
+procedure main()
+    int a
+    int b
+    int c
+    
+    a += 4
+    b += 7
+    
+    call pow(a, b, c)

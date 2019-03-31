@@ -1,0 +1,36 @@
+procedure sqrt(int num, int root)
+    local int bit = 0
+    
+    bit += 1
+    from bit = 1
+    do skip
+    loop
+        call double_bit(bit)
+    until (bit * bit) > num
+    
+    from (bit * bit) > num
+    do
+        uncall double_bit(bit)
+        if ((root + bit) * (root + bit)) <= num then
+            root += bit
+        fi ((root / bit) % 2) != 0
+    until bit = 1
+    
+    bit -= 1
+    num -= root * root
+    
+    delocal int bit = 0
+
+procedure double_bit(int b)
+    local int z = b
+    b += z
+    z -= b / 2
+    delocal int z = 0
+    
+procedure main()
+    int x
+    int r
+    
+    x += 97
+    
+    call sqrt(x, r)

@@ -1,0 +1,13 @@
+procedure floor(int a, int b, int c)
+    c += a / b
+
+procedure main()
+    int a
+    int b
+    int c
+    
+    a += 35
+    b += 4
+    
+    call floor(a, b, c)
+

@@ -1,0 +1,41 @@
+procedure logn(int x, int n, int bits, stack s)
+    local int i = x
+    local int p = 0
+    
+    if x <= 0 then
+        print ("undefined.")
+    else
+        from i = x do
+            p += i / n
+            i <=> p
+            push(p, s)
+        loop
+            bits += 1
+        until i < 1
+        
+        from i < 1 do
+            pop(p, s)
+            i <=> p
+            p -= i / n
+        until i = x
+    fi x <= 0
+    
+    delocal int p = 0
+    delocal int i = x
+    
+procedure log2(int x, int bits, stack s)
+    call logn(x, 2, bits, s)
+
+procedure log10(int x, int bits, stack s)
+    call logn(x, 10, bits, s)
+    
+procedure main()
+    int a
+    int b
+    int c
+    stack s
+    
+    a += 0
+    b += 0
+    
+    call log2(a, b, s)

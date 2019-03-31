@@ -1,0 +1,137 @@
+// gcd(a, b) = sa * a + tb * b
+procedure ext_gcd(int a, int b, int gcd, int sa, int tb, stack s)
+    local int r1 = 0
+    local int s1 = 1
+    local int t1 = 0
+    
+    local int r2 = 0
+    local int s2 = 0
+    local int t2 = 1
+    
+    local int q3 = 0
+    local int r3 = 0
+    local int s3 = 0
+    local int t3 = 0
+    
+    if a = 0 || b = 0 then
+        print ("*a* and *b* must be different than zero.")
+    else
+        r1 += a
+        r2 += b
+        
+        from r2 = b
+        do
+            q3 += r1 / r2
+            r3 += r1 - q3 * r2
+        loop
+            s3 += s1 - q3 * s2
+            t3 += t1 - q3 * t2
+            
+            // ----------- stores info -----------
+            // Rs
+            push(r1, s)
+            r1 += r2                // r1 = 0 e r1 += r2
+            push(r2, s)
+            r2 += r3                // r2 = 0 e r2 += r3
+            push(r3, s)             // r3 = 0
+            
+            // Qs
+            push(q3, s)
+            
+            // Ss
+            push(s1, s)
+            s1 += s2
+            push(s2, s)
+            s2 += s3
+            push(s3, s)
+            
+            // Ts
+            push(t1, s)
+            t1 += t2
+            push(t2, s)
+            t2 += t3
+            push(t3, s)
+        until r3 = 0
+        
+        gcd += r2
+        sa += s2
+        tb += t2
+        
+        from r3 = 0 do
+            r3 -= r1 - q3 * r2
+            q3 -= r1 / r2
+        loop
+            // ----------- recover info -----------
+            // Ts inverso
+            pop(t3, s)
+            t2 -= t3
+            pop(t2, s)
+            t1 -= t2
+            pop(t1, s)
+            
+            // Ss inverso
+            pop(s3, s)
+            s2 -= s3
+            pop(s2, s)
+            s1 -= s2
+            pop(s1, s)
+            
+            // Qs inverso
+            pop(q3, s)
+            
+            // Rs inverso
+            pop(r3, s)
+            r2 -= r3
+            pop(r2, s)
+            r1 -= r2
+            pop(r1, s)
+            
+            t3 -= t1 - q3 * t2
+            s3 -= s1 - q3 * s2
+        until r2 = b
+        
+        r1 -= a
+        r2 -= b
+    fi a = 0 || b = 0
+    
+    delocal int t3 = 0
+    delocal int s3 = 0
+    delocal int r3 = 0
+    delocal int q3 = 0
+    
+    delocal int t2 = 1
+    delocal int s2 = 0
+    delocal int r2 = 0
+    
+    delocal int t1 = 0
+    delocal int s1 = 1
+    delocal int r1 = 0
+
+procedure gcd(int a, int b, int gcd)
+    local int fa = 0
+    local int fb = 0
+    local int g = 0
+    
+    call ext_gcd(a, b, g, fa, fb)
+    gcd += g
+    uncall ext_gcd(a, b, g, fa, fb)
+    
+    delocal int g = 0
+    delocal int fb = 0
+    delocal int fa = 0
+
+procedure main()
+    int a
+    int b
+    int g
+    int fa
+    int fb
+    stack s
+    
+    // https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+    a += 8
+    b += 13
+    
+    call ext_gcd(a, b, g, fa, fb, s)
+    //call gcd(a, b, g)
+

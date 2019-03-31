@@ -1,0 +1,16 @@
+procedure ceil(int a, int b, int c)
+    c += a / b
+    
+    if a % b != 0 then
+        c += 1
+    fi a % b != 0
+    
+procedure main()
+    int a
+    int b
+    int c
+    
+    a += 5
+    b += -6
+    
+    call ceil(a, b, c)

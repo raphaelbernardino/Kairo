@@ -1,0 +1,6 @@
+procedure abs(int a, int b)
+    if a < 0 then
+        b -= a
+    else
+        b += a
+    fi a < 0
