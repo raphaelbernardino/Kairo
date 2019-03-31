@@ -1,0 +1,55 @@
+procedure randx(int x, int a, int ainv, int n)
+    local int c = 1
+    local int t = 0
+    
+    // nextx = (a * x + c) mod n
+    t += (a * x + c) % n
+    
+    //prevx = (ainverse * (x - c)) mod n
+    x -= ainv * (t - c) % n
+    x <=> t
+
+    delocal int t = 0
+    delocal int c = 1
+    
+procedure random(int x, int a, int i, int n)
+    local int test = (a * i) % n
+    
+    if test = 1 then
+        call randx(x, a, i, n)
+    else
+        print ("*i* is not modular multiplicative inverse of *a*.")
+    fi test = 1
+    
+    delocal int test = (a * i) % n
+    
+    
+// ----------------------------------------------------------------------------------
+// RLCG: https://github.com/bobbaluba/rlcg/blob/master/include/rlcg.hpp
+// Using https://www.ams.org/journals/mcom/1999-68-225/S0025-5718-99-00996-5/S0025-5718-99-00996-5.pdf
+// a = 3935559000370003845  &&  ainv = -4746243923404857011 = 13700500150304694605
+// n = 2 ** 64
+// c = 1
+procedure rand(int x)
+    local int a = 3935559000370003845
+    local int n = 18446744073709551616
+    local int ainv = -4746243923404857011
+    
+    call randx(x, a, ainv, n)
+    
+    delocal int ainv = -4746243923404857011
+    delocal int n = 18446744073709551616
+    delocal int a = 3935559000370003845
+
+procedure main()
+    int seed
+    stack s
+    
+    seed += 2
+    
+    call rand(seed, s)
+    call rand(seed, s)
+    call rand(seed, s)
+    call rand(seed, s)
+    call rand(seed, s)
+    call rand(seed, s)
